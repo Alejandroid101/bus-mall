@@ -1,0 +1,38 @@
+*{
+    outline: dotted 1px red;
+}
+body main header{
+    font-size: 3em;
+    color: blue;
+    line-height: 75px;
+    background-color: darkgray;
+}
+body main figure figcaption{
+    font-size: 1.5em;
+    text-align: center;
+    width: auto;
+    height: auto;
+    background-color: darkgray
+
+}
+img{
+    display: block;
+    max-width: 300px;
+    max-height: 300px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* position: absolute; */
+}
+body main figure{
+    max-width: auto;
+    max-height: auto;
+    overflow: hidden;
+}
+figure{
+}
+body footer{
+    position: absolute;
+    bottom: 0;
+}
