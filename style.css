@@ -12,26 +12,33 @@ body main figure figcaption{
     text-align: center;
     width: auto;
     height: auto;
-    background-color: darkgray
+    background-color: darkgray;
+}
+main{
+    align-content: center;
 
 }
+section{
+    float: left;
+}
 img{
-    display: block;
+    cursor: pointer;
+    display: inline-block;
     max-width: 300px;
     max-height: 300px;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    height: 300px;
+    width: 300px;
+    margin: 0 0 0 0;
+    
     /* position: absolute; */
 }
-body main figure{
+body main section figure{
+    display: inline-block;
     max-width: auto;
     max-height: auto;
     overflow: hidden;
 }
-figure{
-}
+
 body footer{
     position: absolute;
     bottom: 0;

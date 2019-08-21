@@ -1,77 +1,146 @@
 'use strict';
-// for (i=0; i < 3; i++)
-function everything (){
-var section = document.getElementsByTagName('section')[0];
-var figure = document.createElement('figure');
-var imageElement = document.createElement('img');
-var imageCaption = document.createElement('figcaption');
-section.appendChild(figure);
-figure.appendChild(imageElement);
-figure.appendChild(imageCaption);
+
+var container = document.getElementById('image-container');
+var thisSet = {};
+var previousSet = {};
+var allImages = [];
+var totalClicks = 0;
 
 
-function Image(name, url) {
-    this.name = name;
-    this.src = url;
-    Image.list.push(this);
-}
-Image.list = [];
-
-// function loadImageFromArray() {
-//   for (var i = 0; i < imagesToBeLoaded.length; i++) {
-//     new Image(`Image-${i}`, imagesToBeLoaded[i]);
-//   }
-// }
-
-function loadImages() {
-  new Image('bag', '/assets/bag.jpg');
-  new Image('banana', '/assets/banana.jpg');
-  new Image('bathroom', '/assets/bathroom.jpg');
-  new Image('boots', '/assets/boots.jpg');
-  new Image('breakfast', '/assets/breakfast.jpg');
-  new Image('bubblegum', '/assets/bubblegum.jpg');
-  new Image('chair', '/assets/chair.jpg');
-  new Image('cthulhu', '/assets/cthulhu.jpg');
-  new Image('dog', '/assets/dog-duck.jpg');
-  new Image('dragon', '/assets/dragon.jpg');
-  new Image('pen', '/assets/pen.jpg');
-  new Image('pet', '/assets/pet-sweep.jpg');
-  new Image('scissors', '/assets/scissors.jpg');
-  new Image('shark', '/assets/shark.jpg');
-  new Image('sweep', '/assets/sweep.png');
-  new Image('tauntaun', '/assets/tauntaun.jpg');
-  new Image('unicorn', '/assets/unicorn.jpg');
-  new Image('usb', '/assets/usb.gif');
-  new Image('water', '/assets/water-can.jpg');
-  new Image('wine', '/assets/wine-glass.jpg');
-
-  console.log(Image.list);
+function CatalogEntry(name, url) {
+  this.id = Math.random();
+  this.name = name;
+  this.src = url;
+  this.numClicks = 0;
+  this.numViews = 0;
+  allImages.push(this);
 }
 
-function showRandomImage() {
+CatalogEntry.prototype.updateViews = function () {
+  this.numViews++;
+}
 
-  // Random, but make sure we haven't seen it before ...
-  var randomNumber = Math.floor(Math.random() * Image.list.length);
+CatalogEntry.prototype.updateClicks = function () {
+  this.numClicks++;
+}
 
-  // <img id="image" src="" />
-  // Change what's being shown
-//   for (var i = 0; i < 3; i++){
-    imageElement.src = Image.list[randomNumber].src;
-    imageCaption.textContent = Image.list[randomNumber].name;
- 
+
+
+function loadCatalogEntrys() {
+  new CatalogEntry('R2D2 Bag', '/assets/bag.jpg');
+  new CatalogEntry('Banana Slicer', '/assets/banana.jpg');
+  new CatalogEntry('TP Tech Stand', '/assets/bathroom.jpg');
+  new CatalogEntry('Toeless Rain Boots', '/assets/boots.jpg');
+  new CatalogEntry('Ultimate breakfast maker', '/assets/breakfast.jpg');
+  new CatalogEntry('Meatball bubblegum', '/assets/bubblegum.jpg');
+  new CatalogEntry('WTF Chair', '/assets/chair.jpg');
+  new CatalogEntry('Mighty Cthulhu', '/assets/cthulhu.jpg');
+  new CatalogEntry('Dragon Meat', '/assets/dragon.jpg');
+  new CatalogEntry('Pen cap utensils', '/assets/pen.jpg');
+  new CatalogEntry('Pet Sweeper', '/assets/pet-sweep.jpg');
+  new CatalogEntry('Pizzissors', '/assets/scissors.jpg');
+  new CatalogEntry('Shark sleeping bag', '/assets/shark.jpg');
+  new CatalogEntry('Baby sweeper', '/assets/sweep.png');
+  new CatalogEntry('TaunTaun sleeping bag', '/assets/tauntaun.jpg');
+  new CatalogEntry('Tenticle USB', '/assets/usb.gif');
+  new CatalogEntry('Unicorn Meat', '/assets/unicorn.jpg');
+  new CatalogEntry('Water Can', '/assets/water-can.jpg');
+  new CatalogEntry('Egg Wine Glass', '/assets/wine-glass.jpg');
+}
+
+function setupImageContainers(numImages) {
+
+  for (var i = 1; i <= numImages; i++) {
+    // Add an <img /> to the section
+    var figure = document.createElement('figure');
+    var img = document.createElement('img');
+    var imageCaption = document.createElement('figcaption');
+    
+    imageCaption.id = `caption-${i}`;
+    imageCaption.textContent = 'fwh';
+
+    img.id = `image-${i}`;
+    img.src = 'http://placehold.it/200x200';
+    figure.appendChild(img);
+    figure.appendChild(imageCaption);
+    container.appendChild(figure);
+}
+
+}
+
+
+function setupListener() {
+  container.addEventListener('click', clickHandler);
 
 
 }
 
-// imageElement click handler
-imageElement.addEventListener('click', showRandomImage);
-
-
-loadImages();
-
-showRandomImage();
+function clickHandler(e) {
+  var imageName = e.target.alt;
+  // find imageName in that array of images
+  // Add one to the click counter for it.
+  for (var i = 0; i < allImages.length; i++) {
+    if (allImages[i].name === imageName) {
+      allImages[i].updateClicks();
+    }
+  }
+  totalClicks++;
+  if (totalClicks === 25){
+    container.removeEventListener('click', clickHandler);
+    displayResults();
+  }
+  showRandomImages(3);
 }
 
-everything();
-everything();
-everything();
+function showRandomImages(numImages) {
+
+  thisSet = {};
+
+  // loop numImages times ...
+  for (var i = 1; i <= numImages; i++) {
+
+    // find image-# as an id and that's where it goes...
+    var id = `image-${i}`;
+    var img = document.getElementById(id);
+    var capt = document.getElementById(`caption-${i}`);
+
+    // put in a unique and valid random image ***
+    var imageObject = getRandomUniqueImage();
+
+    img.src = imageObject.src;
+    img.alt = imageObject.name;
+    capt.textContent = imageObject.name;
+    
+
+  }
+
+  previousSet = thisSet;
+
+  console.log(allImages);
+}
+
+function getRandomUniqueImage() {
+
+  var found = false;
+
+  while (!found) {
+    var n = Math.floor(Math.random() * allImages.length);
+    if (!thisSet[n] && !previousSet[n]) {
+      found = allImages[n];
+      allImages[n].updateViews();
+      thisSet[n] = true;
+    }
+  }
+
+  return found; // something from that array
+}
+
+
+function displayResults(){
+    console.log('clicked 25 times');
+}
+
+loadCatalogEntrys();
+setupImageContainers(3);
+setupListener();
+showRandomImages(3);
