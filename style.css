@@ -40,6 +40,6 @@ body main section figure{
 }
 
 body footer{
-    position: absolute;
+    position: relative;
     bottom: 0;
 }
