@@ -92,6 +92,8 @@ function clickHandler(e) {
     }
     displayResults();
   }
+  //=======the next lines calls the function that makes All of the images and their info into a string
+  stringifier();
   showRandomImages(3);
 }
 
@@ -121,7 +123,13 @@ function showRandomImages(numImages) {
 
   console.log(allImages);
 }
-
+//=====stringifier
+function stringifier (){
+  var labelsToString = JSON.stringify(labels);
+  localStorage.setItem('storedLabels', labelsToString);
+  var dataToString = JSON.stringify(data);
+  localStorage.setItem('storedData',dataToString);
+}
 
 
 function getRandomUniqueImage() {
