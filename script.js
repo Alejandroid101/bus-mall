@@ -92,8 +92,8 @@ function clickHandler(e) {
     }
     displayResults();
   }
-  //=======the next lines calls the function that makes All of the images and their info into a string
   stringifier();
+  //=======the next lines calls the function that makes All of the images and their info into a string
   showRandomImages(3);
 }
 
@@ -124,12 +124,6 @@ function showRandomImages(numImages) {
   console.log(allImages);
 }
 //=====stringifier
-function stringifier (){
-  var labelsToString = JSON.stringify(labels);
-  localStorage.setItem('storedLabels', labelsToString);
-  var dataToString = JSON.stringify(data);
-  localStorage.setItem('storedData',dataToString);
-}
 
 
 function getRandomUniqueImage() {
@@ -149,7 +143,25 @@ function getRandomUniqueImage() {
 }
 var labels = [];
 var data = [];
+var allData = []
 
+function stringifier(){
+  var labelsToString = JSON.stringify(labels);
+  localStorage.setItem('storedLabels', labelsToString);
+  var dataToString = JSON.stringify(data);
+  localStorage.setItem('storedData',dataToString);
+}
+// im following johns steps here, but i feel like im doing one extra step..
+function arrayfier(){
+  var lab = localStorage.getItem('storedLabels');
+  labelsAsArray = JSON.parse(lab);
+  var dat = localStorage.getItem('storedData');
+  dataAsArray = JSON.parse(dat);
+                    for (var d = 0; d < allImages; d++){
+                    var allD = data[d] + dataToString[d];
+                    allData.push(allD[d]);
+                    }
+}
 
 
 
@@ -159,10 +171,11 @@ function displayResults(){
   var myChart = new Chart(ctx, {
       type: 'bar',
       data: {
-          labels: labels,
+          labels: labels, 
           datasets: [{
               label: '# of Votes',
-              data: data,
+              // im adding the stored info here
+              data: data, allData,
               backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',
                   'rgba(54, 162, 235, 0.2)',
